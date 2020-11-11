@@ -38,6 +38,19 @@ interface FetchBooksFail {
     type: BooksActionTypes.FETCH_BOOKS_FAIL;
 }
 
+interface AddBook {
+    type: BooksActionTypes.ADD_BOOK;
+}
+
+interface AddBooksuccess {
+    type: BooksActionTypes.ADD_BOOK_SUCCESS;
+    payload: Books;
+}
+
+interface AddBookFail {
+    type: BooksActionTypes.ADD_BOOK_FAIL;
+}
+
 export const fetchBooks = (): ThunkResult<void> => async dispatch => {
     handleFetchBooks(dispatch);
     try {
@@ -50,7 +63,6 @@ export const fetchBooks = (): ThunkResult<void> => async dispatch => {
 export const handleFetchBooks = (dispatch: Dispatch<FetchBooks>) => {
     dispatch({ type: BooksActionTypes.FETCH_BOOKS });
 };
-
 export const handleFetchBooksSuccess = (
     dispatch: Dispatch<FetchBooksSuccess>,
     response: Books
@@ -65,16 +77,42 @@ export const handleFetchBooksFail = (dispatch: Dispatch<FetchBooksFail>) => {
         type: BooksActionTypes.FETCH_BOOKS_FAIL
     });
 };
+export const addBook = (): ThunkResult<void> => async dispatch => {
+    handleAddBook(dispatch);
+    try {
+        const response: AxiosResponse<Book[]> = await axios.create({baseURL: url}).get('/create');
+        handleAddBookSuccess(dispatch, response.data);
+    } catch (e) {
+        handleAddBookFail(dispatch);
+    }
+};
+export const handleAddBookFail = (dispatch: Dispatch<AddBookFail>) => {
+    dispatch({
+        type: BooksActionTypes.ADD_BOOK_FAIL
+    });
+};
+export const handleAddBook = (dispatch: Dispatch<AddBook>) => {
+    dispatch({ type: BooksActionTypes.ADD_BOOK });
+};
+export const handleAddBookSuccess = (
+    dispatch: Dispatch<AddBooksuccess>,
+    response: Books
+) =>
+    dispatch({
+        type: BooksActionTypes.ADD_BOOK_SUCCESS,
+        payload: response
+    });
+
 export type BooksAction =
     | FetchBooks
     | FetchBooksSuccess
-    | FetchBooksFail;
+    | FetchBooksFail
+    | AddBook
+    | AddBooksuccess
+    | AddBookFail;
     // | FetchBook
     // | FetchBooksuccess
     // | FetchBookFail
-    // | AddBook
-    // | AddBooksuccess
-    // | AddBookFail
     // | EditBook
     // | EditBooksuccess
     // | EditBookFail

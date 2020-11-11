@@ -1,12 +1,12 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-import allBooks from "./conmponents/allBooks";
+import AllBooks from "./conmponents/AllBooks";
 
 function App() {
   return (
     <div className="App">
-
+      <AllBooks />
     </div>
   );
 }
